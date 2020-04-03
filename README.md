@@ -1,4 +1,4 @@
-# Mirzaki Json Walker
+# Powerfuldeveloper Json Walker
 
 Walk on jsons like it's nothing 😎  
 # Usage
