@@ -34,6 +34,9 @@ class JsonWalker(object):
     def __int__(self):
         return int(self.__inner_cool_data__)
 
+    def __call__(self, default):
+        return self.__(default)
+
     @property
     def _(self):
         """ Returns a properties value """
@@ -50,7 +53,7 @@ class JsonWalker(object):
                 data = json.loads(data)
             except:
                 pass
-        if isinstance(data, JsonWalker):
+        if isinstance(data, self.__class__):
             data = data._
         self.__inner_cool_data__ = data
 
@@ -59,24 +62,24 @@ class JsonWalker(object):
             return super().__getattribute__(name)
         except:
             try:
-                return JsonWalker(self.__inner_cool_data__[name])
+                return self.__class__(self.__inner_cool_data__[name])
             except (KeyError, TypeError):
-                return JsonWalker(None)
+                return self.__class__(None)
 
     def __getitem__(self, item):
         try:
-            return JsonWalker(self.__inner_cool_data__[item])
+            return self.__class__(self.__inner_cool_data__[item])
         except (KeyError, TypeError):
-            return JsonWalker(None)
+            return self.__class__(None)
 
     def __iter__(self):
         if self.__inner_cool_data__ is not None:
             if isinstance(self.__inner_cool_data__, list):
                 for i in self.__inner_cool_data__:
-                    yield JsonWalker(i)
+                    yield self.__class__(i)
             elif isinstance(self.__inner_cool_data__, dict):
                 for key, value in self.__inner_cool_data__.items():
-                    yield key, JsonWalker(value)
+                    yield key, self.__class__(value)
             else:
                 return iter([])
         else:

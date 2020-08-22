@@ -1,6 +1,7 @@
 from unittest import TestCase
 from powerfuldeveloper.json_walker import JsonWalker
 
+
 class JsonWalkerTest(TestCase):
     def test_can_parse_none(self):
         json_walker = JsonWalker(None)
@@ -62,3 +63,18 @@ class JsonWalkerTest(TestCase):
         self.assertEqual(json_walker.__(0), 1)
         self.assertEqual(json_walker.data._, None)
         self.assertEqual(json_walker[0]._, None)
+
+    def test_is_callable(self):
+        json_walker = JsonWalker({})
+        self.assertEqual(json_walker.d(0), 0)
+
+        json_walker = JsonWalker({"data": 1})
+        self.assertEqual(json_walker.data(0), 1)
+
+    def test_is_extendable(self):
+        class JsonNewWalker(JsonWalker):
+
+            def get_class(self):
+                return self.__class__
+
+        self.assertEqual(JsonNewWalker({}).get_class(), JsonNewWalker)
